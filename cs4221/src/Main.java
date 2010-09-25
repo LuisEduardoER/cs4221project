@@ -21,5 +21,7 @@ public class Main {
 
         //Print the functional dependency
         control.printFD(fds);
+        Transitivity t = new Transitivity();
+        t.test();
     }
 }
