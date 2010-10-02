@@ -2,12 +2,7 @@
 import java.util.*;
 import java.lang.*;
 
-/**
- * Write a description of class FD here.
- * 
- * @author (Cui Zheng, please add your name here) 
- * @version (19-9-2010)
- */
+
 public class FD implements Comparable
 {
     // instance variables - replace the example below with your own
@@ -22,9 +17,12 @@ public class FD implements Comparable
     //input format: 
     //  left: A, B, C, D
     //  right: A, B, C, D
-    public FD(String left, String right){
+    public FD(String left, String right) throws Exception{
         StringTokenizer lefttoken = new StringTokenizer(left,", ");
         StringTokenizer righttoken = new StringTokenizer(right,", ");
+        if (lefttoken.countTokens()==0 || righttoken.countTokens()==0)
+        	throw new Exception("left or right is empty!");
+        else {
         _BitLeft = new BitSet();
         _BitRight = new BitSet();
         while(lefttoken.countTokens()>0){
@@ -38,6 +36,7 @@ public class FD implements Comparable
             char c = next.charAt(0);
             BitSet bc = ToBitSet(c);
             _BitRight.or(bc);
+        }
         }
     }
 
@@ -48,6 +47,9 @@ public class FD implements Comparable
     public FD(String left, String right, int max) throws Exception{
         StringTokenizer lefttoken = new StringTokenizer(left,", ");
         StringTokenizer righttoken = new StringTokenizer(right,", ");
+        if (lefttoken.countTokens()==0 || righttoken.countTokens()==0)
+        	throw new Exception("left or right is empty!");
+        else {
         _BitLeft = new BitSet();
         _BitRight = new BitSet();
         while(lefttoken.countTokens()>0){
@@ -62,7 +64,9 @@ public class FD implements Comparable
             BitSet bc = ToBitSet(c, max);
             _BitRight.or(bc);
         }
-    }
+        }
+        }
+        
 
     //obj must be an FD
     public int compareTo(Object fd){
@@ -71,7 +75,7 @@ public class FD implements Comparable
 
     //Convert a char attibute into a BitSet
     //maximum of arrtibutes is 26
-    public BitSet ToBitSet(char a){
+    public static BitSet ToBitSet(char a){
         BitSet bits = new BitSet(26);
         int id = a - 'A';
         bits.flip(id);
@@ -117,7 +121,7 @@ public class FD implements Comparable
             return false;
     }
 
-    public String LefttoString(){
+    public String leftToString(){
         String left = "";
         int diff;
         char c;
@@ -131,8 +135,40 @@ public class FD implements Comparable
         }
         return left;
     }
+    
+    public String leftToStringWithDelimiter(){
+        String left = "";
+        int diff;
+        char c;
+        for(int i = 0; i<_BitLeft.length();){
+            if(i != 0) left += "";
+            int setid = _BitLeft.nextSetBit(i);
+            diff = setid + 65;
+            c = (char)diff;
+            left += c;
+            left +=',';
+            i = setid + 1;
+        }
+        return left;
+    }
+    
+    public static String toStringWithDelimiter(BitSet bitset){
+        String str = "";
+        int diff;
+        char c;
+        for(int i = 0; i<bitset.length();){
+            if(i != 0) str += "";
+            int setid = bitset.nextSetBit(i);
+            diff = setid + 65;
+            c = (char)diff;
+            str += c;
+            str +=',';
+            i = setid + 1;
+        }
+        return str;
+    }
 
-    public String RighttoString(){
+    public String rightToString(){
         String right = "";
         int diff;
         char c;
@@ -146,23 +182,39 @@ public class FD implements Comparable
         }
         return right;
     }
+    
+    public String rightToStringWithDelimiter(){
+        String right = "";
+        int diff;
+        char c;
+        for(int i = 0; i<_BitRight.length();){
+            if(i != 0) right += "";
+            int setid = _BitRight.nextSetBit(i);
+            diff = setid + 65;
+            c = (char)diff;
+            right += c;
+            right +=',';
+            i = setid + 1;
+        }
+        return right;
+    }
 
     public String toString(){
-        return (this.LefttoString() + " -> " + this.RighttoString());
+        return (this.leftToString() + " -> " + this.rightToString());
     }
 
     public void printFD(){
         System.out.println(this.toString());
     }
 
-    public static void test(){                
+    public static void test()throws Exception{                
         
-        FD fd1 = new FD("A,B,C,D","E,F,G");
-        System.out.println("LefttoString() output: " + fd1.LefttoString());
-        System.out.println("RightttoString() output: " + fd1.RighttoString());
+        FD fd1 = new FD("A,B,G","F,E",7);
+        System.out.println("leftToString() output: " + fd1.leftToString());
+        System.out.println("RightttoString() output: " + fd1.rightToString());
         System.out.println("toString() output: " + fd1.toString());
         fd1.printFD();
-
+    
         FD fd2 = new FD("A,B,C,D","E");
         FD fd3 = new FD("A,C,D","E,F,G");
         FD fd4 = new FD("A,B,C,D","E,F,G");
@@ -180,4 +232,7 @@ public class FD implements Comparable
         else if(fd3.compareTo(fd1) == 0) System.out.println("fd3 > fd1");
         else System.out.println("fd3 < fd2");
     }
+    public static void main(String[] args) throws Exception{
+        test();
+        }
 }

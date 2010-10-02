@@ -1,17 +1,16 @@
 import java.util.*;
-/**
- * Write a description of class FD here.
- * 
- * @author (Cui Zheng, please add your name here) 
- * @version (19-9-2010)
- */
+
 public class FDSet
 {
     // instance variables - replace the example below with your own
     private Set<FD> _fds;
 
-    //construct the functioanl dependency set based on string array input
-    public FDSet(String fds[][], int max){
+    //basic constructor
+    public FDSet() {
+    	 _fds = new TreeSet<FD>();
+    }    
+    //construct the functional dependency set based on string array input
+    public FDSet(String fds[][], int max)throws Exception{
         _fds = new TreeSet<FD>();
         for(int i=0; i<max; i++){
             _fds.add(new FD(fds[i][0],fds[i][1]));
@@ -26,25 +25,74 @@ public class FDSet
     public Set<FD> getFDs (){
         return _fds;
     }
-
-    public static void test(){
+    
+    public void addFD(FD fd) {
+    	_fds.add(fd);
+    }
+    
+    public void removeFD(FD fd) {
+    	_fds.remove(fd);
+    }
+    
+    public void printFDSet() {
+    	 Iterator it = this.getFDs().iterator();
+	        while(it.hasNext()){
+	            FD fd=(FD)it.next();
+	            fd.printFD();
+	        }
+    }
+    
+    
+    public static void test()throws Exception{
         int max_fd = 7;
-        String fdinput[][] = {{"A,B,C,D","E,F,G"},
-                {"A,B,C,D","E"},
-                {"A,C,D","E,F,G"},
+        String fdinput[][] = {{"A","B"},
                 {"A","C"},
-                {"C","D"},
-                {"A,B,C,D","E,F,G"}, //duplicate, thus will not actually add into set
-                {"A,B","E,F,G,H"}};
+                {"B","C"},
+                {"D","B"},
+                {"B","D"},
+                {"A,B,E","F"}, //duplicate, thus will not actually add into set
+                {"A,B,C","A,B"}};
+        
+        //Step 1 and 2 test
+        //this should be the order to obtain the minimal cover 
         FDSet fdset = new FDSet(fdinput, max_fd);
-
+        Iterator it3 = fdset.getFDs().iterator();
+        while(it3.hasNext()){
+            FD fd=(FD)it3.next();
+            fd.printFD();
+        }
+        System.out.println("Above is the original set of fds"); 
+        System.out.println();
+        
+        fdset=FDAlgorithms.allSingleRHSAttribute(fdset);
+        Iterator it2 = fdset.getFDs().iterator();
+        while(it2.hasNext()){
+            FD fd=(FD)it2.next();
+            fd.printFD();
+        }
+        System.out.println("Above is set with all singleton rhs attributes"); 
+        System.out.println();
+        
+        fdset=FDAlgorithms.removeExtraneousAttr(fdset);
         Iterator it = fdset.getFDs().iterator();
-
         while(it.hasNext()){
             FD fd=(FD)it.next();
             fd.printFD();
         }
-        FD fd1 = new FD("A","G");
+       System.out.println("Above is set with no extraneous attributes on lhs"); 
+       System.out.println();
+       
+       fdset=FDAlgorithms.removeRedundantFDs(fdset);
+       Iterator it4 = fdset.getFDs().iterator();
+       while(it4.hasNext()){
+           FD fd=(FD)it4.next();
+           fd.printFD();
+       }
+      System.out.println("Above is set with no redundant attributes");  
+      System.out.println();
+      
+      
+        FD fd1 = new FD("B","C");
         FD fd2 = new FD("B","G");
         fd1.printFD();
         fd2.printFD();
@@ -69,4 +117,9 @@ public class FDSet
             System.out.println("is NOT a member of fdset");
         }
     }
+    public static void main(String[] args) throws Exception{
+        test();
+        }
+        
+    
 }
