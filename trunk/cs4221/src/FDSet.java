@@ -1,6 +1,7 @@
 import java.util.*;
+import java.lang.*;
 
-public class FDSet
+public class FDSet implements Comparable
 {
     // instance variables - replace the example below with your own
     private Set<FD> _fds;
@@ -8,11 +9,15 @@ public class FDSet
     //basic constructor
     public FDSet() {
     	 _fds = new TreeSet<FD>();
-    }    
+    }
     //construct the functional dependency set based on string array input
     public FDSet(String fds[][], int max)throws Exception{
+        
+        //System.out.println(fds[0][0] + fds[0][1]);
+        
         _fds = new TreeSet<FD>();
         for(int i=0; i<max; i++){
+            if(!fds[i][0].isEmpty() && !fds[i][1].isEmpty())
             _fds.add(new FD(fds[i][0],fds[i][1]));
         }
     }
@@ -20,6 +25,12 @@ public class FDSet
     //construct a fdset based on another fdsed
     public FDSet(FDSet oldfds){
         _fds = new TreeSet<FD>(oldfds.getFDs());
+    }
+
+
+    //obj must be an FD
+    public int compareTo(Object fdset){
+        return this.toString().compareTo(fdset.toString());
     }
 
     public Set<FD> getFDs (){
