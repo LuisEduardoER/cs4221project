@@ -18,8 +18,12 @@ public class FD implements Comparable
     //  left: A, B, C, D
     //  right: A, B, C, D
     public FD(String left, String right) throws Exception{
+
+        //System.out.println(left + " " + right);
+
         StringTokenizer lefttoken = new StringTokenizer(left,", ");
         StringTokenizer righttoken = new StringTokenizer(right,", ");
+
         if (lefttoken.countTokens()==0 || righttoken.countTokens()==0)
         	throw new Exception("left or right is empty!");
         else {

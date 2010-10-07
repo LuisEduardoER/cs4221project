@@ -38,6 +38,7 @@ public class Control{
                     for (int j = 0; j < acceptableInputs.length; j++){
                         if(input.charAt(i) == acceptableInputs[j]){
                             fds[x][y] = fds[x][y].concat(Character.toString(input.charAt(i)));
+                            fds[x][y] = fds[x][y].concat(", ");
                         }
                     }
                 }
