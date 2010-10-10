@@ -30,7 +30,13 @@ public class Main {
         Partition p = new Partition();
         bigset = p.works(fdset);
         System.out.println();
-        System.out.println("This is the BigSet(result (p/s:work in progress))");
+        System.out.println("This is the BigSet after partiton(result (p/s:work in progress))");
+        bigset.printBigSet();
+
+        Merge m = new Merge();
+        bigset = m.works(bigset);
+        System.out.println();
+        System.out.println("This is the BigSet after merge(result (p/s:work in progress))");
         bigset.printBigSet();
 
         ///Step 5 Transistivity
