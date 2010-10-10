@@ -32,6 +32,7 @@ public class Main {
         System.out.println();
         System.out.println("This is the BigSet after partiton(result (p/s:work in progress))");
         bigset.printBigSet();
+        System.out.println();
 
         Merge m = new Merge();
         bigset = m.works(bigset);
@@ -40,7 +41,16 @@ public class Main {
         bigset.printBigSet();
 
         ///Step 5 Transistivity
-        Transitivity t = new Transitivity();
-        //t.test();
+        String[][] data = bigset.BigSetToArray(5);
+        Transitivity t = new Transitivity(data);
+        System.out.println();
+        data = t.m5_plotTransitivity();
+        t.m5_indentifyTransitivity(data);
+        System.out.println("This is the BigSet after TD elimination(result (p/s:work in progress))");
+        t.m5_printFDBigset();
+        System.out.println("There u have the Relations");
+        t.m6_displayRelation();
+        System.out.println("This are three other testcases for transitivity");
+        t.test();
     }
 }
