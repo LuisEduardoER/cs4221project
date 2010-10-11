@@ -48,7 +48,7 @@ public class Main {
         System.out.println();
 
         Merge m = new Merge();
-        bigset = m.works(bigset);
+        bigset = m.works(bigset,fdset);
         System.out.println();
         System.out.println("This is the BigSet after merge(result (p/s:work in progress))");
         bigset.printBigSet();

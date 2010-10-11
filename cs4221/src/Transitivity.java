@@ -118,7 +118,7 @@ public class Transitivity {
         Partition p = new Partition();
         bigset = p.works(f);
         Merge m = new Merge();
-        bigset = m.works(bigset);
+        bigset = m.works(bigset,f);
         bigset.printBigSet();
     }
     public void m6_displayRelation() throws Exception{
@@ -129,7 +129,7 @@ public class Transitivity {
         Partition p = new Partition();
         bigset = p.works(f);
         Merge m = new Merge();
-        bigset = m.works(bigset);
+        bigset = m.works(bigset,f);
         ll = bigset.BigSetToRelation();
         for(int i=0; i<ll.size(); i++){
             System.out.println(ll.get(i));
