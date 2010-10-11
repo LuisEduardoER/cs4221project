@@ -128,8 +128,7 @@ public class Transitivity {
         FDSet f = new FDSet(fdset,fdset.length);
         Partition p = new Partition();
         bigset = p.works(f);
-        Merge m = new Merge();
-        bigset = m.works(bigset,f);
+        bigset.printBigSet();
         ll = bigset.BigSetToRelation();
         for(int i=0; i<ll.size(); i++){
             System.out.println(ll.get(i));

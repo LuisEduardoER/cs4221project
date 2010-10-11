@@ -81,12 +81,11 @@ public class BigSet {
                     s = addDelimiter(fd.leftToString()) + "," +addDelimiter(fd.rightToString());
                     j++;
                 }else{
-                    //System.out.println( s +" LHS = "+ fd.leftToString() + " RHS = " + fd.rightToString());
-                    if(s.indexOf(fd.leftToString()) != -1
-                            && s.indexOf(fd.rightToString()) != -1){
+                    if(s.indexOf(addDelimiter(fd.leftToString())) != -1
+                            && s.indexOf(addDelimiter(fd.rightToString())) != -1){
                         //mark both as key
-                    }else if(s.indexOf(fd.leftToString()) != -1
-                            && s.indexOf(fd.rightToString()) == -1){
+                    }else if(s.indexOf(addDelimiter(fd.leftToString())) != -1
+                            && s.indexOf(addDelimiter(fd.rightToString())) == -1){
                         s = s + "," + fd.rightToString();
                     }
                 }
