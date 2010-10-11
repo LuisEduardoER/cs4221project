@@ -3,7 +3,7 @@ import java.util.*;
 
 public class BigSet {
 
-    private Set<FDSet> _bs;
+    public Set<FDSet> _bs;
 
     //basic constructor
     public BigSet() {
@@ -48,6 +48,23 @@ public class BigSet {
             System.out.println("}");
         }
     }
+    
+    public int countFD() {
+    	int a=0;
+    	   Iterator it = this.getBigSet().iterator();
+           while (it.hasNext()) {
+               FDSet fds = (FDSet) it.next();
+              
+               Iterator it2 = fds.getFDs().iterator();
+               while (it2.hasNext()) {
+            	   FD fd = (FD) it2.next();
+                   a++;
+                   }
+           }
+           
+         return a;
+    }
+    
     public LinkedList BigSetToRelation() {
         int i = 0;
         LinkedList ll = new LinkedList();
