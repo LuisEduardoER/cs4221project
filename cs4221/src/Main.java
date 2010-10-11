@@ -25,6 +25,19 @@ public class Main {
         System.out.println();
         System.out.println("This is the original FDSet with the FDs");
         fdset.printFDSet();
+        
+        ///Step 1: Eliminate extraneous attributes
+        fdset=FDAlgorithms.allSingleRHSAttribute(fdset);
+        fdset=FDAlgorithms.removeExtraneousAttr(fdset);
+        System.out.println();
+        System.out.println("This is after step 1");
+        fdset.printFDSet();
+        
+        ///Step 2:
+        fdset=FDAlgorithms.removeRedundantFDs(fdset);
+        System.out.println();
+        System.out.println("This is the minimal cover after step 1 and 2");
+        fdset.printFDSet();
 
         ///Step 3 Partition : Convert the FDSet into a few FDSets(BigSet)
         Partition p = new Partition();
@@ -41,7 +54,7 @@ public class Main {
         bigset.printBigSet();
 
         ///Step 5 Transistivity
-        String[][] data = bigset.BigSetToArray(5);
+        String[][] data = bigset.BigSetToArray(bigset.countFD());
         Transitivity t = new Transitivity(data);
         System.out.println();
         data = t.m5_plotTransitivity();
@@ -50,7 +63,7 @@ public class Main {
         t.m5_printFDBigset();
         System.out.println("There u have the Relations");
         t.m6_displayRelation();
-        System.out.println("This are three other testcases for transitivity");
-        t.test();
+        //System.out.println("This are three other testcases for transitivity");
+        //t.test();
     }
 }
