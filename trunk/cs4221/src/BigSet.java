@@ -48,23 +48,23 @@ public class BigSet {
             System.out.println("}");
         }
     }
-    
+
     public int countFD() {
-    	int a=0;
-    	   Iterator it = this.getBigSet().iterator();
-           while (it.hasNext()) {
-               FDSet fds = (FDSet) it.next();
-              
-               Iterator it2 = fds.getFDs().iterator();
-               while (it2.hasNext()) {
-            	   FD fd = (FD) it2.next();
-                   a++;
-                   }
-           }
-           
-         return a;
+        int a = 0;
+        Iterator it = this.getBigSet().iterator();
+        while (it.hasNext()) {
+            FDSet fds = (FDSet) it.next();
+
+            Iterator it2 = fds.getFDs().iterator();
+            while (it2.hasNext()) {
+                FD fd = (FD) it2.next();
+                a++;
+            }
+        }
+
+        return a;
     }
-    
+
     public LinkedList BigSetToRelation() {
         int i = 0;
         LinkedList ll = new LinkedList();
@@ -77,26 +77,31 @@ public class BigSet {
             Iterator it2 = fds.getFDs().iterator();
             while (it2.hasNext()) {
                 FD fd = (FD) it2.next();
-                if( j == 0){
-                    s = addDelimiter(fd.leftToString()) + "," +addDelimiter(fd.rightToString());
+                if (j == 0) {
+                    s = addDelimiter(fd.leftToString()) + "," + addDelimiter(fd.rightToString());
                     j++;
-                }else{
-                    if(s.indexOf(addDelimiter(fd.leftToString())) != -1
-                            && s.indexOf(addDelimiter(fd.rightToString())) != -1){
+                } else {
+                    /*if (s.indexOf(addDelimiter(fd.leftToString())) != -1 && s.indexOf(addDelimiter(fd.rightToString())) != -1) {
                         //mark both as key
-                    }else if(s.indexOf(addDelimiter(fd.leftToString())) != -1
-                            && s.indexOf(addDelimiter(fd.rightToString())) == -1){
+                    } else if (s.indexOf(addDelimiter(fd.leftToString())) != -1 && s.indexOf(addDelimiter(fd.rightToString())) == -1) {
                         s = s + "," + fd.rightToString();
-                    }
+                    }*/
+                    s = combineAttributes(s,fd.leftToString());
+                    s = combineAttributes(s,fd.rightToString());
                 }
             }
-            s = "R" + i + " = (" + s + ")";
-            ll.add(s);
+            if (!s.equals("")) {
+                s = "R" + i + " = (" + s + ")";
+                ll.add(s);
+            }else{
+                i--;
+            }
         }
         return ll;
     }
+
     public String[][] BigSetToArray(int noOfFD) {
-        String[][] bs =new String[noOfFD][2];
+        String[][] bs = new String[noOfFD][2];
         int i = 0;
         Iterator it = this.getBigSet().iterator();
         while (it.hasNext()) {
@@ -111,11 +116,21 @@ public class BigSet {
         }
         return bs;
     }
-    public String addDelimiter(String s){
+
+    public String combineAttributes(String s, String substr){
+        for(int i=0; i<substr.length(); i++){
+            if(s.indexOf(substr.charAt(i)) == -1){
+                s = s + "," + substr.charAt(i);
+            }
+        }
+        return s;
+    }
+
+    public String addDelimiter(String s) {
         String newString = "";
-        for(int i=0; i<s.length(); i++){
+        for (int i = 0; i < s.length(); i++) {
             newString = newString + s.charAt(i);
-            if( i+1 != s.length()){
+            if (i + 1 != s.length()) {
                 newString = newString + ",";
             }
         }
