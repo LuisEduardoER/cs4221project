@@ -21,11 +21,12 @@ public class Main {
         String[][]fds = new String[maxFD][width];
         fds = readInput.readInput(input, maxFD, width);
 
+
         fdset = new FDSet(fds,maxFD);
         System.out.println();
         System.out.println("This is the original FDSet with the FDs");
         fdset.printFDSet();
-        
+        FDSet temp = fdset;
         ///Step 1: Eliminate extraneous attributes
         fdset=FDAlgorithms.allSingleRHSAttribute(fdset);
         fdset=FDAlgorithms.removeExtraneousAttr(fdset);
@@ -52,6 +53,9 @@ public class Main {
         System.out.println();
         System.out.println("This is the BigSet after merge(result (p/s:work in progress))");
         bigset.printBigSet();
+
+        System.out.println("\nthis is the FDSet J");
+        m.getJ().printFDSet();
 
         ///Step 5 Transistivity
         String[][] data = bigset.BigSetToArray(bigset.countFD());
