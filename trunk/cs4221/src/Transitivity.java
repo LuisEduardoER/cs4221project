@@ -141,8 +141,7 @@ public class Transitivity {
         System.out.println();
     }
 
-    /*private BigSet m6_grouping() throws Exception {
-        BigSet bs = new BigSet();
+    private BigSet m6_regrouping(BigSet bs) throws Exception {
         String[][] tempset = new String[fdset.length][2];
         String[][] TDset = fdset;
         int k;
@@ -166,7 +165,7 @@ public class Transitivity {
             }
         }
         return bs;
-    }*/
+    }
 
     public void test() throws Exception {
         //Aim: 3 set of transitivity test cases
