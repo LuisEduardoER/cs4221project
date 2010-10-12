@@ -162,14 +162,14 @@ public class FDAlgorithms
         //given a set of fds, return a set where there is no redundant attributes in the set
         public static FDSet removeRedundantFDs(FDSet fdset) throws Exception {
         	FDSet newfdset=new FDSet(fdset);
-        	FDSet newfdset2=new FDSet(fdset);
+        	//FDSet newfdset2=new FDSet(fdset);
         	Iterator it = fdset.getFDs().iterator();
         	while(it.hasNext())  {
                 FD fd=(FD)it.next();
                  if (checkForRedundancy(newfdset,fd))
-                	 newfdset2.removeFD(fd); 
+                	 newfdset.removeFD(fd); 
                 }
-        	return newfdset2;
+        	return newfdset;
         }
        
  

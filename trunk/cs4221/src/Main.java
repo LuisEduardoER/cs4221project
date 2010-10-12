@@ -28,7 +28,7 @@ public class Main {
         fdset.printFDSet();
         FDSet temp = fdset;
         ///Step 1: Eliminate extraneous attributes
-        fdset=FDAlgorithms.allSingleRHSAttribute(fdset);
+       // fdset=FDAlgorithms.allSingleRHSAttribute(fdset);
         fdset=FDAlgorithms.removeExtraneousAttr(fdset);
         System.out.println();
         System.out.println("This is after step 1");
