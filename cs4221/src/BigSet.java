@@ -71,6 +71,7 @@ public class BigSet {
         Iterator it = this.getBigSet().iterator();
         while (it.hasNext()) {
             String s = "";
+            String key = "";
             int j = 0;
             i++;
             FDSet fds = (FDSet) it.next();
@@ -78,6 +79,7 @@ public class BigSet {
             while (it2.hasNext()) {
                 FD fd = (FD) it2.next();
                 if (j == 0) {
+                    key = fd.leftToString();
                     s = addDelimiter(fd.leftToString()) + "," + addDelimiter(fd.rightToString());
                     j++;
                 } else {
@@ -88,10 +90,13 @@ public class BigSet {
                     }*/
                     s = combineAttributes(s,fd.leftToString());
                     s = combineAttributes(s,fd.rightToString());
+                    if(key.indexOf(fd.leftToString()) == -1){
+                        key = key + ", " + fd.leftToString();
+                    }
                 }
             }
             if (!s.equals("")) {
-                s = "R" + i + " = (" + s + ")";
+                s = "R" + i + " = (" + s + ")      key = " + key;
                 ll.add(s);
             }else{
                 i--;
