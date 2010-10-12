@@ -129,7 +129,11 @@ public class Transitivity {
         // 
         LinkedList ll = new LinkedList();
         BigSet bigset;
-        bigset = m6_grouping();
+        FDSet f = new FDSet(fdset, fdset.length);
+        Partition p = new Partition();
+        bigset = p.works(f);
+        Merge m = new Merge();
+        bigset = m.works(bigset, f);
         ll = bigset.BigSetToRelation();
         for (int i = 0; i < ll.size(); i++) {
             System.out.println(ll.get(i));
@@ -137,7 +141,7 @@ public class Transitivity {
         System.out.println();
     }
 
-    private BigSet m6_grouping() throws Exception {
+    /*private BigSet m6_grouping() throws Exception {
         BigSet bs = new BigSet();
         String[][] tempset = new String[fdset.length][2];
         String[][] TDset = fdset;
@@ -162,7 +166,7 @@ public class Transitivity {
             }
         }
         return bs;
-    }
+    }*/
 
     public void test() throws Exception {
         //Aim: 3 set of transitivity test cases
