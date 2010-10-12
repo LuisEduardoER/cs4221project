@@ -2,104 +2,185 @@ import java.util.*;
 
 public class Merge {
 
-    public BigSet works(BigSet b,FDSet myfdset) throws Exception{
+    FDSet J = new FDSet();
 
-        boolean changed = true;
+    public BigSet works(BigSet b,FDSet myfdset) throws Exception{
         BigSet newB = new BigSet();
 
-        while(changed){
-            changed = false;
-            Iterator it1 = b.getBigSet().iterator();
-        
-            while(it1.hasNext() && !changed){
-                FDSet fds1 =(FDSet)it1.next();
+        Iterator it1 = b.getBigSet().iterator();
 
-                Iterator it2 = fds1.getFDs().iterator();
-                FD fd1 =(FD)it2.next();
-                BitSet fd1LeftBitSet = fd1.getLeft();
-                BitSet closure1 = FDAlgorithms.AttributeClosure(myfdset, fd1LeftBitSet);
+        ArrayList<FDSet> fds = new ArrayList<FDSet>();
+        ArrayList<FD> closure = new ArrayList<FD>();
 
-                Iterator it3 = b.getBigSet().iterator();
-                while(it3.hasNext() && !changed){
-                    FDSet fds2 =(FDSet)it3.next();
+        while(it1.hasNext()){
+            FDSet fds1 =(FDSet)it1.next();
+            fds.add(fds1);
+            Iterator it2 = fds1.getFDs().iterator();
+            FD fd1 =(FD)it2.next();
+            //fd1.printFD();
+            BitSet fd1LeftBitSet = fd1.getLeft();
+            BitSet temp = FDAlgorithms.AttributeClosure(myfdset, fd1LeftBitSet);
+            //System.out.println(temp.toString());
+            closure.add(new FD(FD.toStringWithDelimiter(temp),fd1.leftToStringWithDelimiter()));
+        }
 
-                    Iterator it4 = fds2.getFDs().iterator();
-                    FD fd2 =(FD)it4.next();
-                    BitSet fd2LeftBitSet = fd2.getLeft();
-                    BitSet closure2 = FDAlgorithms.AttributeClosure(myfdset, fd2LeftBitSet);
+        Collections.sort(closure);
+        Collections.sort(fds);
 
-                    if(closure1.equals(closure2) && !fds1.equals(fds2)){
+        for(int i = 0;i < closure.size();i++){
+            //System.out.println(closure.get(i).toString());
+        }
+        //System.out.println();
 
-                        //System.out.println(closure1.toString() + "  " + closure2.toString());
-                        //fd1.printFD();
-                        //fd2.printFD();
+        int a = closure.size();
+        String [] s = new String[a];
+        for(int i = 0;i < closure.size();i++){
+            s[i] = closure.get(i).leftToString();
+        }
 
-                        FDSet newfds = new FDSet();
+        ArrayList<String> store = new ArrayList<String>();
+        String ref = s[0];
+        store.add(closure.get(0).rightToString());
+        for(int i = 1;i < closure.size();i++){
+            
+            if(s[i].equals(ref))store.add(closure.get(i).rightToString());
 
-                        newfds.addFD(new FD(fd1.leftToStringWithDelimiter(),fd2.leftToStringWithDelimiter()));
-                        newfds.addFD(new FD(fd2.leftToStringWithDelimiter(),fd1.leftToStringWithDelimiter()));
-
-                        newB.addFDSet(newfds);
-                        //System.out.println("newB after addimg newfds");
-                        //newB.printBigSet();
-
-                        b.removeFDSet(fds1);
-                        b.removeFDSet(fds2);
-                        //System.out.println("b after remove fds1-2");
-                        //b.printBigSet();
-                        
-                        newfds = FDAlgorithms.allSingleRHSAttribute(newfds);    //J
-                        fds1 = FDAlgorithms.allSingleRHSAttribute(fds1);        //H1
-                        fds2 = FDAlgorithms.allSingleRHSAttribute(fds2);        //H2
-
-                        Iterator it5 = fds1.getFDs().iterator();
-                        Iterator it6 = fds2.getFDs().iterator();
-
-                        FDSet newUnionH = new FDSet();
-                        while(it5.hasNext()) newUnionH.addFD((FD)it5.next());
-                        while(it6.hasNext()) newUnionH.addFD((FD)it6.next());
-
-                        Iterator it7 = newfds.getFDs().iterator();
-                        boolean removed = false;
-
-                        while(it7.hasNext()){
-
-                            FD temp1 = (FD)it7.next();
-                            Iterator it8 = newUnionH.getFDs().iterator();
-                            removed = false;
-
-                            while(it8.hasNext() && !removed){
-
-                                FD temp2 = (FD)it8.next();
-
-                                if(temp1.equals(temp2)) {
-                                    newUnionH.removeFD(temp2);
-                                    removed = true;
-                                }
+            if(!s[i].equals(ref) || i == closure.size()-1){
+                ref = s[i];
+                if(store.size() > 1){
+                    FDSet newfds = new FDSet();
+                    for(int m = 0 ; m < store.size() ; m++){
+                        for(int n = 0 ; n < store.size() ; n++){
+                            if(m < n){
+                                newfds = buildJ(newfds,store.get(m),store.get(n));
                             }
                         }
-                        //newUnionH.printFDSet();
-                        newB.addFDSet(newUnionH);
-                        //System.out.println("newB after addimg newUnionH");
-                        //newB.printBigSet();
-                        changed = true;
-
                     }
-                    else if(!it3.hasNext()){
-                        //System.out.println("newB in else");
-                        newB.addFDSet(fds1);
-                        //newB.printBigSet();
+
+                    FDSet newUnionH = new FDSet();
+                    for(int n = 0 ; n < store.size() ; n++){
+                        for(int m = 0;m < fds.size();m++){
+                            Iterator i3 = fds.get(m).getFDs().iterator();
+                            FD fd = (FD)i3.next();
+                            if(fd.leftToString().equals(store.get(n))){
+                                newUnionH = buildH(newUnionH,newfds,fds.get(m));
+                            }
+                        }
+                    }
+
+                for(int m = store.size()-1 ; m >= 0 ; m--)store.remove(m);
+
+                //newfds.printFDSet();
+                //newUnionH.printFDSet();
+
+                J = newfds;
+                newB.addFDSet(newfds);
+                newB.addFDSet(newUnionH);
+
+                if(i != closure.size()-1)store.add(closure.get(i).rightToString());
+
+            }
+            else{
+                for(int m = 0;m < fds.size();m++){
+                    Iterator i3 = fds.get(m).getFDs().iterator();
+                    FD fd = (FD)i3.next();
+                    if(fd.leftToString().equals(store.get(0))){
+                        newB.addFDSet(fds.get(m));
+                        break;
                     }
                 }
+                    store.remove(0);
+
+                store.add(closure.get(i).rightToString());
+
+                if(i == closure.size()-1){
+                   for(int m = 0;m < fds.size();m++){
+                    Iterator i3 = fds.get(m).getFDs().iterator();
+                    FD fd = (FD)i3.next();
+                    if(fd.leftToString().equals(store.get(0))){
+                        newB.addFDSet(fds.get(m));
+                        break;
+                    }
+                }
+                    store.remove(0);
+                }
+            }
+                
             }
         }
+
         return newB;
     }
 
-    public boolean checkPE(FD fd,FD ifd){
-        if(fd.getLeft().equals(ifd.getRight()) &&
-           fd.getRight().equals(ifd.getLeft())    )
-            return true;
-        else return false;
+     public FDSet buildJ(FDSet newfds,String x,String y) throws Exception{
+        FD addition1 = new FD(addDelimiter(x),addDelimiter(y));
+        FD addition2 = new FD(addDelimiter(y),addDelimiter(x));
+        FD addition3 = new FD(addDelimiter(x),addDelimiter(y));
+
+        //addition1.printFD();addition2.printFD();addition3.printFD();
+
+        addition3.getLeft().and(addition3.getRight());
+        //addition3.printFD();
+
+        addition1.getLeft().andNot(addition3.getLeft());
+        addition1.getRight().andNot(addition3.getLeft());
+        //addition1.printFD();
+
+        addition2.getLeft().andNot(addition3.getLeft());
+        addition2.getRight().andNot(addition3.getLeft());
+        //addition2.printFD();
+
+        newfds.addFD(addition1);
+        newfds.addFD(addition2);
+
+        return newfds;
+     }
+
+     public FDSet buildH(FDSet newUnionH,FDSet newfds,FDSet fds1) throws Exception{
+
+        newfds = FDAlgorithms.allSingleRHSAttribute(newfds);    //J
+        fds1 = FDAlgorithms.allSingleRHSAttribute(fds1);        //H1
+
+        Iterator it5 = fds1.getFDs().iterator();
+
+        while(it5.hasNext()) newUnionH.addFD((FD)it5.next());
+
+        Iterator it7 = newfds.getFDs().iterator();
+        boolean removed = false;
+
+        while(it7.hasNext()){
+
+            FD temp1 = (FD)it7.next();
+            Iterator it8 = newUnionH.getFDs().iterator();
+            removed = false;
+
+            while(it8.hasNext() && !removed){
+
+                FD temp2 = (FD)it8.next();
+
+                if(temp1.equals(temp2)) {
+                    newUnionH.removeFD(temp2);
+                    removed = true;
+                }
+            }
+        }
+        return newUnionH;
+     }
+     
+     public String addDelimiter(String str){
+        String left = "";
+        char c;
+        for(int i = 0; i<str.length();i++){
+            if(i != 0) left += "";
+            c = str.charAt(i);
+            left += c;
+            left +=',';
+        }
+        return left;
     }
+
+
+     public FDSet getJ(){
+         return J;
+     }
 }
