@@ -119,15 +119,15 @@ public class Merge {
 
         //addition1.printFD();addition2.printFD();addition3.printFD();
 
-        addition3.getLeft().and(addition3.getRight());
+        //addition3.getLeft().and(addition3.getRight());
         //addition3.printFD();
 
-        addition1.getLeft().andNot(addition3.getLeft());
-        addition1.getRight().andNot(addition3.getLeft());
+        //addition1.getLeft().andNot(addition3.getLeft());
+        //addition1.getRight().andNot(addition3.getLeft());
         //addition1.printFD();
 
-        addition2.getLeft().andNot(addition3.getLeft());
-        addition2.getRight().andNot(addition3.getLeft());
+        //addition2.getLeft().andNot(addition3.getLeft());
+        //addition2.getRight().andNot(addition3.getLeft());
         //addition2.printFD();
 
         newfds.addFD(addition1);
@@ -194,8 +194,8 @@ public class Merge {
                  Iterator itr = J.get(i).getFDs().iterator();
                  while(itr.hasNext()){
                      FD fd = (FD) itr.next();
-                     fds[index][0] = fd.leftToString();
-                     fds[index][1] = fd.rightToString();
+                     fds[index][0] = addDelimiter2(fd.leftToString());
+                     fds[index][1] = addDelimiter2(fd.rightToString());
                      index++;
                  }
              }
@@ -203,4 +203,14 @@ public class Merge {
 
          return fds;
      }
+     public String addDelimiter2(String s) {
+        String newString = "";
+        for (int i = 0; i < s.length(); i++) {
+            newString = newString + s.charAt(i);
+            if (i + 1 != s.length()) {
+                newString = newString + ",";
+            }
+        }
+        return newString;
+    }
 }

@@ -147,6 +147,7 @@ public class UI extends JFrame implements ActionListener {
     private String Output = "";
     private FDSet fdset;
     private BigSet bigset;
+    private String[][] arrayJ;
     private Transitivity t;
 
     public void actionPerformed(ActionEvent event) {
@@ -220,6 +221,7 @@ public class UI extends JFrame implements ActionListener {
             try {
                 Merge m = new Merge();
                 bigset = m.works(bigset, fdset);
+                arrayJ = m.getArrayJ();
                 this.Output += ("\nThis is the BigSet after merge result\n");
                 this.Output += bigset.toString();
 
@@ -240,7 +242,7 @@ public class UI extends JFrame implements ActionListener {
                 String[][] data = bigset.BigSetToArray(bigset.countFD());
                 this.t = new Transitivity(data);
                 data = t.m5_plotTransitivity();
-                t.m5_indentifyTransitivity(data);
+                t.m5_indentifyTransitivity(data, arrayJ);
                 this.Output += ("\nThis is the BigSet after TD elimination result\n");
                 this.Output += t.m5_toString();
 
