@@ -2,7 +2,7 @@ import java.util.*;
 
 public class Merge {
 
-    FDSet J = new FDSet();
+    ArrayList<FDSet> J = new ArrayList<FDSet>();
 
     public BigSet works(BigSet b,FDSet myfdset) throws Exception{
         BigSet newB = new BigSet();
@@ -73,7 +73,7 @@ public class Merge {
                 //newfds.printFDSet();
                 //newUnionH.printFDSet();
 
-                J = newfds;
+                J.add(newfds);
                 newB.addFDSet(newfds);
                 newB.addFDSet(newUnionH);
 
@@ -180,7 +180,7 @@ public class Merge {
     }
 
 
-     public FDSet getJ(){
+     public ArrayList<FDSet> getJ(){
          return J;
      }
 }
