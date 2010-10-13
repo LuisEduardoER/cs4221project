@@ -183,4 +183,24 @@ public class Merge {
      public ArrayList<FDSet> getJ(){
          return J;
      }
+
+     public String[][] getArrayJ(){
+         String[][]fds = new String[10][2];
+
+         int index = 0;
+
+         if(J.size() > 0){
+             for(int i = 0 ; i < J.size() ; i++){
+                 Iterator itr = J.get(i).getFDs().iterator();
+                 while(itr.hasNext()){
+                     FD fd = (FD) itr.next();
+                     fds[index][0] = fd.leftToString();
+                     fds[index][1] = fd.rightToString();
+                     index++;
+                 }
+             }
+         }
+
+         return fds;
+     }
 }
