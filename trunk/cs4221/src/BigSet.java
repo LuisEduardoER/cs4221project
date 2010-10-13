@@ -87,6 +87,16 @@ public class BigSet {
 
         return a;
     }
+    
+    public int countFDset() {
+        int a = 0;
+        Iterator it = this.getBigSet().iterator();
+        while (it.hasNext()) {
+        	FDSet fds = (FDSet) it.next();
+                a++;
+            }
+        return a;
+    }
 
     public LinkedList BigSetToRelation() {
         int i = 0;
@@ -164,4 +174,7 @@ public class BigSet {
         }
         return newString;
     }
+    
+    
+    
 }

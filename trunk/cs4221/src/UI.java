@@ -6,6 +6,7 @@ import java.awt.Panel.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
+import java.util.LinkedList;
 
 public class UI extends JFrame implements ActionListener {
 
@@ -149,6 +150,8 @@ public class UI extends JFrame implements ActionListener {
     private BigSet bigset;
     private String[][] arrayJ;
     private Transitivity t;
+    private BigSet bigset2;
+    private FDAlgorithms a;
 
     public void actionPerformed(ActionEvent event) {
 
@@ -261,7 +264,7 @@ public class UI extends JFrame implements ActionListener {
                 this.Output += ("\nThere u have the Relations\n");
                 this.Output += t.m6_toString();
 
-
+                BigSet bigset2=t.m6_displayRelation();
                 this.buttons.setEnabled(true);
                 this.button6.setEnabled(false);
 
@@ -274,7 +277,12 @@ public class UI extends JFrame implements ActionListener {
         else if (event.getSource().equals(buttons)){
             try {
                 this.Output += ("\nSuperfluous\n");
-
+                FDAlgorithms.removeSuperfluous(bigset2).printBigSet();
+                LinkedList ll = new LinkedList();
+                ll=FDAlgorithms.removeSuperfluous(bigset2).BigSetToRelation();
+                this.Output += a.superfluous_tostring(ll);
+                
+                
                 this.button1.setEnabled(true);
                 this.buttons.setEnabled(false);
 

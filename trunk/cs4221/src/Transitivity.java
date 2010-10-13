@@ -147,7 +147,7 @@ public class Transitivity {
         return bigset.toString();
     }
 
-    public void m6_displayRelation() throws Exception {
+    public BigSet m6_displayRelation() throws Exception {
         // 
         LinkedList ll = new LinkedList();
         BigSet bigset;
@@ -162,6 +162,7 @@ public class Transitivity {
             System.out.println(ll.get(i));
         }
         System.out.println();
+        return bigset;
     }
 
     public String m6_toString() throws Exception {
