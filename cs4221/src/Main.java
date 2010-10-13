@@ -78,7 +78,17 @@ public class Main {
         System.out.println("This is the BigSet after TD elimination(result (p/s:work in progress))");
         t.m5_printFDBigset();
         System.out.println("There u have the Relations");
-        t.m6_displayRelation();
+        BigSet bs=t.m6_displayRelation();
+       // bs.printBigSet();
+        
+        //superfluous attributes
+      //  FDAlgorithms.removeSuperfluous(bs).printBigSet();
+        LinkedList ll = new LinkedList();
+        ll=FDAlgorithms.removeSuperfluous(bs).BigSetToRelation();
+       
+        System.out.println(FDAlgorithms.superfluous_tostring(ll));
+        
+        
         //System.out.println("This are three other testcases for transitivity");
         //t.test();
     }
