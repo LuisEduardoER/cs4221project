@@ -48,6 +48,29 @@ public class BigSet {
             System.out.println("}");
         }
     }
+    public String toString() {
+        String res="";
+        int i = 70;
+
+        Iterator it = this.getBigSet().iterator();
+        while (it.hasNext()) {
+            res += (new Character((char) i).toString() + " = {");
+            i++;
+            FDSet fds = (FDSet) it.next();
+
+            Iterator it2 = fds.getFDs().iterator();
+            while (it2.hasNext()) {
+                FD fd = (FD) it2.next();
+                res += (fd.toString());
+                if (it2.hasNext()) {
+                    res += (", ");
+                }
+            }
+
+            res += ("}\n");
+        }
+        return res;
+    }
 
     public int countFD() {
         int a = 0;

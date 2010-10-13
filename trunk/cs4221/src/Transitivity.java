@@ -125,6 +125,17 @@ public class Transitivity {
         bigset.printBigSet();
     }
 
+    public  String m5_toString() throws Exception {
+        //Aim: To print out the FDBigset
+        BigSet bigset;
+        FDSet f = new FDSet(fdset, fdset.length);
+        Partition p = new Partition();
+        bigset = p.works(f);
+        Merge m = new Merge();
+        bigset = m.works(bigset, f);
+        return bigset.toString();
+    }
+
     public void m6_displayRelation() throws Exception {
         // 
         LinkedList ll = new LinkedList();
@@ -139,6 +150,25 @@ public class Transitivity {
             System.out.println(ll.get(i));
         }
         System.out.println();
+    }
+
+    public String m6_toString() throws Exception {
+        //
+        String res = "";
+        LinkedList ll = new LinkedList();
+        BigSet bigset;
+        FDSet f = new FDSet(fdset, fdset.length);
+        Partition p = new Partition();
+        bigset = p.works(f);
+        Merge m = new Merge();
+        bigset = m.works(bigset, f);
+        ll = bigset.BigSetToRelation();
+        for (int i = 0; i < ll.size(); i++) {
+            res += (ll.get(i));
+            res +="\n";
+        }
+        res += "\n";
+        return res;
     }
 
     private BigSet m6_regrouping(BigSet bs) throws Exception {

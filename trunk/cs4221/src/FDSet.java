@@ -52,6 +52,17 @@ public class FDSet implements Comparable
 	            fd.printFD();
 	        }
     }
+
+    public String toString() {
+        String res="";
+    	 Iterator it = this.getFDs().iterator();
+	        while(it.hasNext()){
+	            FD fd=(FD)it.next();
+                    res+=fd.toString();
+	            res+="\n";
+	        }
+         return res;
+    }
     
     
     public static void test()throws Exception{
