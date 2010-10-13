@@ -46,7 +46,7 @@ public class Main {
         Partition p = new Partition();
         bigset = p.works(fdset);
         System.out.println();
-        System.out.println("This is the BigSet after partiton(result (p/s:work in progress))");
+        System.out.println("This is the BigSet after partition(result (p/s:work in progress))");
         bigset.printBigSet();
         System.out.println();
 
@@ -56,14 +56,18 @@ public class Main {
         System.out.println("This is the BigSet after merge(result (p/s:work in progress))");
         bigset.printBigSet();
 
-        System.out.println("\nThis is the FDSet J");
+        //System.out.println("\nThis is the FDSet J");
         ArrayList<FDSet> Js = m.getJ();
         if(Js.size() > 0){
             for(int i = 0; i < Js.size();i++){
-                Js.get(i).printFDSet();
-                System.out.println();
+                //System.out.println(i+1);
+                //Js.get(i).printFDSet();
             }
         }
+
+        String[][] arrayJ = m.getArrayJ();
+        //System.out.println("String array J");
+        //readInput.printFD(arrayJ);
 
         ///Step 5 Transistivity
         String[][] data = bigset.BigSetToArray(bigset.countFD());
