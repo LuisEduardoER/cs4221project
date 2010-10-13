@@ -103,7 +103,7 @@ public class BigSet {
                 FD fd = (FD) it2.next();
                 if (j == 0) {
                     key = fd.leftToString();
-                    s = addDelimiter(fd.leftToString()) + "," + addDelimiter(fd.rightToString());
+                    s = combineAttributes(addDelimiter(fd.leftToString()),fd.rightToString());
                     j++;
                 } else {
                     /*if (s.indexOf(addDelimiter(fd.leftToString())) != -1 && s.indexOf(addDelimiter(fd.rightToString())) != -1) {

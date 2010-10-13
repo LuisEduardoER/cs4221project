@@ -244,6 +244,7 @@ public class UI extends JFrame implements ActionListener {
                 data = t.m5_plotTransitivity();
                 t.m5_indentifyTransitivity(data, arrayJ);
                 this.Output += ("\nThis is the BigSet after TD elimination result\n");
+                this.Output += t.m5_getTDvar();
                 this.Output += t.m5_toString();
 
                 this.button6.setEnabled(true);

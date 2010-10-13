@@ -12,6 +12,7 @@ import java.util.*;
 public class Transitivity {
 
     private String[][] fdset;
+    private String TDvar = "";
 
     public Transitivity() {
     }
@@ -59,7 +60,7 @@ public class Transitivity {
                 }
                 if (flag == true) {
                     //eliminate this fd from the fdset[][]
-                    fdset = m5_eliminateTransitivity(input,jset, i, j);
+                    fdset = m5_eliminateTransitivity(input, jset, i, j);
                 }
             }
         }
@@ -89,14 +90,14 @@ public class Transitivity {
         return false;
     }
 
-    public String[][] m5_eliminateTransitivity(String[][] input,String[][] jset, int x, int y) {
+    public String[][] m5_eliminateTransitivity(String[][] input, String[][] jset, int x, int y) {
         //Trim the FDset to remove transitivity FD
         String[] temp = input[x][y].split("->");
         String newFdSet[][] = new String[fdset.length - 1][fdset.length - 1];
         String LHS = temp[0], RHS = temp[1];
-        for(int i=0; i<jset.length; i++){
+        for (int i = 0; i < jset.length; i++) {
             //System.out.println(LHS + " " + jset[i][0] + " " + RHS + " " + jset[i][1]);
-            if(LHS.equals(jset[i][0]) && RHS.equals(jset[i][1])){
+            if (LHS.equals(jset[i][0]) && RHS.equals(jset[i][1])) {
                 return fdset;
             }
         }
@@ -108,7 +109,8 @@ public class Transitivity {
                 cnt++;
             }
         }
-        System.out.println("Eliminate Transitivity FD : " + input[x][y]);
+        //System.out.println("Eliminate Transitivity FD : " + input[x][y]);
+        TDvar = TDvar + "Eliminate Transitivity FD : " + input[x][y] +"\n";
         return newFdSet;
     }
 
@@ -130,8 +132,11 @@ public class Transitivity {
         bigset = m.works(bigset, f);
         bigset.printBigSet();
     }
+    public String m5_getTDvar(){
+        return TDvar;
+    }
 
-    public  String m5_toString() throws Exception {
+    public String m5_toString() throws Exception {
         //Aim: To print out the FDBigset
         BigSet bigset;
         FDSet f = new FDSet(fdset, fdset.length);
@@ -151,6 +156,7 @@ public class Transitivity {
         bigset = p.works(f);
         Merge m = new Merge();
         bigset = m.works(bigset, f);
+        bigset = m6_regrouping(f,bigset, m.getJ());
         ll = bigset.BigSetToRelation();
         for (int i = 0; i < ll.size(); i++) {
             System.out.println(ll.get(i));
@@ -168,69 +174,77 @@ public class Transitivity {
         bigset = p.works(f);
         Merge m = new Merge();
         bigset = m.works(bigset, f);
+        bigset = m6_regrouping(f,bigset, m.getJ());
         ll = bigset.BigSetToRelation();
         for (int i = 0; i < ll.size(); i++) {
             res += (ll.get(i));
-            res +="\n";
+            res += "\n";
         }
         res += "\n";
         return res;
     }
 
-    private BigSet m6_regrouping(BigSet bs) throws Exception {
-        String[][] tempset = new String[fdset.length][2];
-        String[][] TDset = fdset;
-        int k;
-        for (int i = 0; i < TDset.length; i++) {
-            if (!TDset[i][0].equals(".")) {
-                k = 0;
-                tempset[k][0] = TDset[i][0];
-                tempset[k][1] = TDset[i][1];
-                for (int j = i+1; j < TDset.length; j++) {
-                    if (TDset[i][0].equals(TDset[j][0]) ||
-                            (TDset[i][0].equals(TDset[j][1]) && TDset[i][1].equals(TDset[j][0]))) {
-                        k++;
-                        tempset[k][0] = TDset[j][0];
-                        tempset[k][1] = TDset[j][1];
-                        TDset[j][0] = ".";
-                        TDset[j][1] = ".";
+    private BigSet m6_regrouping(FDSet f ,BigSet bs, ArrayList<FDSet> listsetj) throws Exception {
+        FDAlgorithms fda = new FDAlgorithms();
+        for (int i = 0; i < listsetj.size(); i++) {
+            Boolean flag = false;
+            BitSet closureJ = fda.AttributeClosure(f, listsetj.get(i).getfirstFD().getLeft());
+            bs.removeFDSet(listsetj.get(i));
+            Iterator it = bs.getBigSet().iterator();
+            while (it.hasNext()) {
+                FDSet fds = (FDSet) it.next();
+                Iterator it2 = fds.getFDs().iterator();
+                while (it2.hasNext()) {
+                    FD fd = (FD) it2.next();
+                    BitSet LHS = fd.getLeft();
+                    BitSet closureLHS = fda.AttributeClosure(f, LHS);
+                    //System.out.println(closureJ + " " + closureLHS);
+                    if(closureJ.equals(closureLHS)){
+                        flag = true;
                     }
+                    break;
                 }
-                FDSet f = new FDSet(tempset, k + 1);
-                bs.addFDSet(f);
+                if(flag){
+                    bs.removeFDSet(fds);
+                    bs.addFDSet(fds.mergeFDSets(fds, listsetj.get(i)));
+                    break;
+                }
+            }
+            if(!flag){
+                    bs.addFDSet(listsetj.get(i));
             }
         }
         return bs;
     }
 
     /*public void test() throws Exception {
-        //Aim: 3 set of transitivity test cases
-        System.out.println("TestRelation1 = {A -> B, A -> C, B -> C, C -> D, A -> D}");
-        String testdata1[][] = {{"A", "B"}, {"A", "C"}, {"B", "C"}, {"C", "D"}, {"A", "D"}};
+    //Aim: 3 set of transitivity test cases
+    System.out.println("TestRelation1 = {A -> B, A -> C, B -> C, C -> D, A -> D}");
+    String testdata1[][] = {{"A", "B"}, {"A", "C"}, {"B", "C"}, {"C", "D"}, {"A", "D"}};
 
-        fdset = testdata1;
-        testdata1 = m5_plotTransitivity();
-        m5_indentifyTransitivity(testdata1);
-        m5_printFDBigset();
-        m6_displayRelation();
+    fdset = testdata1;
+    testdata1 = m5_plotTransitivity();
+    m5_indentifyTransitivity(testdata1);
+    m5_printFDBigset();
+    m6_displayRelation();
 
-        System.out.println("TestRelation2 = {OP -> CD, CD -> OP, " +
-                "OP -> A, AO -> B, BP -> C , C -> A}");
-        String testdata2[][] = {{"O,P", "C,D"}, {"C,D", "O,P"},
-            {"O,P", "A"}, {"A,O", "B"}, {"B,P", "C"}, {"C", "A"}};
-        fdset = testdata2;
-        testdata2 = m5_plotTransitivity();
-        m5_indentifyTransitivity(testdata2);
-        m5_printFDBigset();
-        m6_displayRelation();
+    System.out.println("TestRelation2 = {OP -> CD, CD -> OP, " +
+    "OP -> A, AO -> B, BP -> C , C -> A}");
+    String testdata2[][] = {{"O,P", "C,D"}, {"C,D", "O,P"},
+    {"O,P", "A"}, {"A,O", "B"}, {"B,P", "C"}, {"C", "A"}};
+    fdset = testdata2;
+    testdata2 = m5_plotTransitivity();
+    m5_indentifyTransitivity(testdata2);
+    m5_printFDBigset();
+    m6_displayRelation();
 
-        System.out.println("TestRelation3 = {B -> D, D -> B, A -> B, B -> C, A -> F}");
-        String testdata3[][] = {{"B", "D"}, {"D", "B"},
-            {"A", "B"}, {"B", "C"}, {"A", "F"}};
-        fdset = testdata3;
-        testdata3 = m5_plotTransitivity();
-        m5_indentifyTransitivity(testdata3);
-        m5_printFDBigset();
-        m6_displayRelation();
+    System.out.println("TestRelation3 = {B -> D, D -> B, A -> B, B -> C, A -> F}");
+    String testdata3[][] = {{"B", "D"}, {"D", "B"},
+    {"A", "B"}, {"B", "C"}, {"A", "F"}};
+    fdset = testdata3;
+    testdata3 = m5_plotTransitivity();
+    m5_indentifyTransitivity(testdata3);
+    m5_printFDBigset();
+    m6_displayRelation();
     }*/
 }
