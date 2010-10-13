@@ -48,7 +48,7 @@ public class Transitivity {
         return checker;
     }
 
-    public String[][] m5_indentifyTransitivity(String[][] input) {
+    public String[][] m5_indentifyTransitivity(String[][] input, String[][] jset) {
         //Aim: Check each FD for transitivity and eliminate it
         for (int i = 0; i < input.length; i++) {
             for (int j = 0; j < input.length; j++) {
@@ -59,8 +59,7 @@ public class Transitivity {
                 }
                 if (flag == true) {
                     //eliminate this fd from the fdset[][]
-                    System.out.println("Eliminate Transitivity FD : " + input[i][j]);
-                    fdset = m5_eliminateTransitivity(input, i, j);
+                    fdset = m5_eliminateTransitivity(input,jset, i, j);
                 }
             }
         }
@@ -90,11 +89,17 @@ public class Transitivity {
         return false;
     }
 
-    public String[][] m5_eliminateTransitivity(String[][] input, int x, int y) {
+    public String[][] m5_eliminateTransitivity(String[][] input,String[][] jset, int x, int y) {
         //Trim the FDset to remove transitivity FD
         String[] temp = input[x][y].split("->");
         String newFdSet[][] = new String[fdset.length - 1][fdset.length - 1];
         String LHS = temp[0], RHS = temp[1];
+        for(int i=0; i<jset.length; i++){
+            //System.out.println(LHS + " " + jset[i][0] + " " + RHS + " " + jset[i][1]);
+            if(LHS.equals(jset[i][0]) && RHS.equals(jset[i][1])){
+                return fdset;
+            }
+        }
         int cnt = 0;
         for (int i = 0; i < fdset.length; i++) {
             if (!fdset[i][0].equals(LHS) || !fdset[i][1].equals(RHS)) {
@@ -103,6 +108,7 @@ public class Transitivity {
                 cnt++;
             }
         }
+        System.out.println("Eliminate Transitivity FD : " + input[x][y]);
         return newFdSet;
     }
 
@@ -197,7 +203,7 @@ public class Transitivity {
         return bs;
     }
 
-    public void test() throws Exception {
+    /*public void test() throws Exception {
         //Aim: 3 set of transitivity test cases
         System.out.println("TestRelation1 = {A -> B, A -> C, B -> C, C -> D, A -> D}");
         String testdata1[][] = {{"A", "B"}, {"A", "C"}, {"B", "C"}, {"C", "D"}, {"A", "D"}};
@@ -226,5 +232,5 @@ public class Transitivity {
         m5_indentifyTransitivity(testdata3);
         m5_printFDBigset();
         m6_displayRelation();
-    }
+    }*/
 }

@@ -74,7 +74,7 @@ public class Main {
         Transitivity t = new Transitivity(data);
         System.out.println();
         data = t.m5_plotTransitivity();
-        t.m5_indentifyTransitivity(data);
+        t.m5_indentifyTransitivity(data, arrayJ);
         System.out.println("This is the BigSet after TD elimination(result (p/s:work in progress))");
         t.m5_printFDBigset();
         System.out.println("There u have the Relations");
