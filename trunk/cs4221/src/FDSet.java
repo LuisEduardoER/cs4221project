@@ -82,6 +82,17 @@ public class FDSet implements Comparable {
         return res;
     }
 
+    public String toString2() {
+        String res = "";
+        Iterator it = this.getFDs().iterator();
+        while (it.hasNext()) {
+            FD fd = (FD) it.next();
+            res += fd.toString();
+            if(it.hasNext())res += ", ";
+        }
+        return res;
+    }
+
     public static void test() throws Exception {
         int max_fd = 7;
         String fdinput[][] = {{"A", "B"},
