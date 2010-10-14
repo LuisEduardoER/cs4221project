@@ -157,6 +157,7 @@ public class UI extends JFrame implements ActionListener {
 
         if (event.getSource().equals(button1)) {
             try {
+                //this.textArea2.setText("");
                 int maxFD = 10, width = 2;
 
                 ///Step 0 : Read the input and put it into a FDSet::fdset
@@ -269,8 +270,7 @@ public class UI extends JFrame implements ActionListener {
                 this.buttons.setEnabled(true);
                 this.button6.setEnabled(false);
 
-                this.textArea2.setText(this.Output);
-                this.textArea1.setEditable(true);
+                this.textArea2.setText(this.Output);                
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, e);
             }
@@ -286,6 +286,8 @@ public class UI extends JFrame implements ActionListener {
                 this.buttons.setEnabled(false);
 
                 this.textArea2.setText(this.Output);
+                this.textArea1.setEditable(true);
+
                 this.textArea1.setEditable(true);
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, e);
