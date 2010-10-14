@@ -175,6 +175,47 @@ public class BigSet {
         return newString;
     }
     
+    public static void supertest() throws Exception{
+    	 String fdinput[][] = {{"A,B","E"},
+                 {"A,D","B"},
+                 {"A,C","F"},
+                 {"A,C","A,D"},
+                 {"A,C","A,B"},
+                 {"A,B","A,C"},
+                 {"A,B","A,D"},
+                 {"A,D","A,C"},
+                 {"A,D","A,B"}};
+
+                 
+    	 String fdinput2[][] = {{"B","C"}};
+    	 String fdinput3[][] = {{"C","D"}};
+    	 FDSet fdset=new FDSet(fdinput,3);
+    	 FDSet fdset2=new FDSet(fdinput2,1);
+    	 FDSet fdset3=new FDSet(fdinput3,1);
+    	 BigSet bigset= new BigSet();
+    	 
+    	 bigset.addFDSet(fdset);
+    	 bigset.addFDSet(fdset2);
+    	 bigset.addFDSet(fdset3);
+    	 
+    //	 BitSet marked = FD.ToBitSet('D');
+    	 BigSet bigset2= new BigSet();
+    	 LinkedList<FDSet> listfdset=FDAlgorithms.superFluous(bigset);
+    	 LinkedList<FDSet> hope=FDAlgorithms.superFluouscheck(listfdset);
+    	 Iterator it = hope.iterator();
+    	 while (it.hasNext()) {
+    		 FDSet fdsetq = (FDSet)it.next();
+    		 bigset2.addFDSet(fdsetq);
+    	 }
+    	LinkedList ll = new LinkedList();
+    	 ll=bigset2.BigSetToRelation();
+    	System.out.println(FDAlgorithms.superfluous_tostring(ll));
+    	 
+    }
+    
+    public static void main(String[] args) throws Exception{
+   	supertest();
+    }
     
     
 }
