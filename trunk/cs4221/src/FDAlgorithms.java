@@ -194,25 +194,33 @@ public class FDAlgorithms
         	 while(it.hasNext()) {
         		 FDSet fdset = (FDSet) it.next();
         		 BitSet primeattr=getprimeattr(fdset);
-        		  
+        		//  System.out.println("primeattr="+FD.toStringWithDelimiter(primeattr));
         		 for (int i = primeattr.nextSetBit(0); i >= 0; i = primeattr.nextSetBit(i+1)) {
         			 BitSet marked = new BitSet(26);
         			 marked.set(i);
+        			
         			 FDSet gset=createGset(bigset,fdset,marked);
+        		//	 System.out.println("---");
+        			// gset.printFDSet();
+        			 //System.out.println("---");
         			 LinkedList<BitSet> keysmarked = getkeysmarked(getkeys(fdset),marked);
         			 LinkedList<BitSet> keyswithoutmarked = getkeyswithoutmarked(getkeys(fdset),marked);
         			 if (!keyswithoutmarked.isEmpty()) {
         				 Iterator it3 = keyswithoutmarked.iterator();
         				 while(it3.hasNext()) {
         					 BitSet tmpkey=(BitSet)it3.next();
+        				//	 System.out.println(FD.toStringWithDelimiter(tmpkey));
         					 BitSet attriclosure = AttributeClosure(gset,tmpkey);
-        					 attriclosure.and(tmpkey);
+        					// System.out.println(FD.toStringWithDelimiter(attriclosure));
+        					 attriclosure.and(marked);
         					 //restorable
-        					 if (attriclosure.equals(tmpkey)) {
+        					 if (attriclosure.equals(marked)) {
+        						//System.out.println("equals!");
         						 restorable=true;
         						break;
         					 }}
         				 if (restorable) {
+        					 //System.out.println("marked="+FD.toStringWithDelimiter(marked));
         					 Iterator it4=keysmarked.iterator();
         					 while(it4.hasNext()) {
         						 BitSet tmpkey=(BitSet)it4.next();
@@ -233,21 +241,30 @@ public class FDAlgorithms
         				 } 
         				 }
         			 if (restorable && nonessential) {
+        				 
         				 listfdset3.remove(fdset);
         			     FDSet fdsettmp= new FDSet(fdset);
         			     Iterator it6=fdsettmp.getFDs().iterator();
         			     while (it6.hasNext()) {
         			    	 FD fd = (FD)it6.next();
         			    	 FD tmpfd= new FD(fd.leftToStringWithDelimiter(),fd.rightToStringWithDelimiter());
-        			    	 tmpfd.getRight().and(marked);
-        			    	 tmpfd.getLeft().and(marked);
-        			    	 if (tmpfd.getLeft().equals(marked) || tmpfd.getRight().equals(marked))
-        			    		 fdset.removeFD(fd);
+        			    	 BitSet tmpmarked= new BitSet(26);
+        			    	 tmpmarked.or(marked);
+        			    	 tmpmarked.flip(0, tmpmarked.size());
+        			    	 tmpfd.getLeft().and(tmpmarked);
+        			    	 tmpfd.getRight().and(tmpmarked);
+        			    	 FD newfd = new FD(FD.toStringWithDelimiter(tmpfd.getLeft()),FD.toStringWithDelimiter(tmpfd.getRight()));
+        			         fdset.removeFD(fd);
+        			         fdset.addFD(newfd);
         			     }
+        			     //System.out.println("@@");
+        			     //fdset.printFDSet();
+        			     //System.out.println("@@");
         			     listfdset3.add(fdset);
         				 break;
         			 }
         		 }   if (restorable && nonessential) {
+        			 //System.out.println("hahhahhaha!!!!1212");
         			 superFluouscheck(listfdset3);
         			 break;
         		 }
@@ -268,8 +285,11 @@ public class FDAlgorithms
                     FD fd = (FD) it2.next();
                     newfdset.addFD(fd);
                     } }
+        //    System.out.println("---");
+         //   newfdset.printFDSet();
+         //   System.out.println("---");
         	LinkedList<BitSet> keys = getkeyswithoutmarked(getkeys(fdset),marked);
-        	BitSet nonprimeattr = getnonprimeattr(fdset);
+        	BitSet nonprimeattr = getnonprimeattr(fdset,marked);
         	Iterator it3 = keys.iterator();
         	while (it3.hasNext()) {
         		BitSet bit = (BitSet) it3.next();
@@ -299,6 +319,7 @@ public class FDAlgorithms
         	while(it.hasNext())  {
         		FD fd=(FD)it.next();
         		BitSet tmp=(BitSet)fd.getLeft().clone();
+        		if (tmp.cardinality()>1)
         		bs.add(tmp);
         	}
         	return bs;
@@ -336,7 +357,7 @@ public class FDAlgorithms
         
         
       
-        public static BitSet getnonprimeattr(FDSet fdset) {
+        public static BitSet getnonprimeattr(FDSet fdset,BitSet marked) {
         	BitSet leftattr = FD.ToBitSet('A');
         	leftattr.clear();
         	BitSet rightattr = FD.ToBitSet('A');
@@ -349,8 +370,9 @@ public class FDAlgorithms
         		leftattr.or(tmpl);
         		rightattr.or(tmpr);
         	}
-        	leftattr.flip(0, leftattr.size());
-        	leftattr.and(rightattr);
+        	//leftattr.flip(0, leftattr.size());
+        	leftattr.or(rightattr);
+        	leftattr.xor(marked);
         	return leftattr;
         }
         
@@ -371,10 +393,10 @@ public class FDAlgorithms
         	  for (int i = 0; i < ll.size(); i++) {
                   res += (ll.get(i));
                   res += "\n";
-                  System.out.println("!!!");
+                ///  System.out.println("!!!");
               }
               res += "\n";
-              System.out.println(res);
+             /// System.out.println(res);
               return res;
         }
         

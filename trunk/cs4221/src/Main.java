@@ -77,6 +77,7 @@ public class Main {
         t.m5_indentifyTransitivity(data, arrayJ);
         System.out.println("This is the BigSet after TD elimination(result (p/s:work in progress))");
         t.m5_printFDBigset();
+        System.out.println();
         System.out.println("There u have the Relations");
         BigSet bs=t.m6_displayRelation();
        // bs.printBigSet();
@@ -85,7 +86,7 @@ public class Main {
       //  FDAlgorithms.removeSuperfluous(bs).printBigSet();
         LinkedList ll = new LinkedList();
         ll=FDAlgorithms.removeSuperfluous(bs).BigSetToRelation();
-       
+        System.out.println("The Relations after removing superfluous attributes");
         System.out.println(FDAlgorithms.superfluous_tostring(ll));
         
         
