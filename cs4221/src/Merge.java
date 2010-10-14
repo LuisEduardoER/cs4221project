@@ -4,6 +4,7 @@ public class Merge {
 
     ArrayList<FDSet> J = new ArrayList<FDSet>();
 
+    //Merge a few FDSet with the same attributes closure
     public BigSet works(BigSet b,FDSet myfdset) throws Exception{
         BigSet newB = new BigSet();
 
@@ -17,20 +18,13 @@ public class Merge {
             fds.add(fds1);
             Iterator it2 = fds1.getFDs().iterator();
             FD fd1 =(FD)it2.next();
-            //fd1.printFD();
             BitSet fd1LeftBitSet = fd1.getLeft();
             BitSet temp = FDAlgorithms.AttributeClosure(myfdset, fd1LeftBitSet);
-            //System.out.println(temp.toString());
             closure.add(new FD(FD.toStringWithDelimiter(temp),fd1.leftToStringWithDelimiter()));
         }
 
         Collections.sort(closure);
         Collections.sort(fds);
-
-        for(int i = 0;i < closure.size();i++){
-            //System.out.println(closure.get(i).toString());
-        }
-        //System.out.println();
 
         int a = closure.size();
         String [] s = new String[a];
@@ -69,9 +63,6 @@ public class Merge {
                     }
 
                 for(int m = store.size()-1 ; m >= 0 ; m--)store.remove(m);
-
-                //newfds.printFDSet();
-                //newUnionH.printFDSet();
 
                 J.add(newfds);
                 newB.addFDSet(newfds);
@@ -112,23 +103,10 @@ public class Merge {
         return newB;
     }
 
+     //Build J = {x->y, y->x}
      public FDSet buildJ(FDSet newfds,String x,String y) throws Exception{
         FD addition1 = new FD(addDelimiter(x),addDelimiter(y));
         FD addition2 = new FD(addDelimiter(y),addDelimiter(x));
-        FD addition3 = new FD(addDelimiter(x),addDelimiter(y));
-
-        //addition1.printFD();addition2.printFD();addition3.printFD();
-
-        //addition3.getLeft().and(addition3.getRight());
-        //addition3.printFD();
-
-        //addition1.getLeft().andNot(addition3.getLeft());
-        //addition1.getRight().andNot(addition3.getLeft());
-        //addition1.printFD();
-
-        //addition2.getLeft().andNot(addition3.getLeft());
-        //addition2.getRight().andNot(addition3.getLeft());
-        //addition2.printFD();
 
         newfds.addFD(addition1);
         newfds.addFD(addition2);
@@ -136,6 +114,7 @@ public class Merge {
         return newfds;
      }
 
+     //Build Union H = Hi - J;
      public FDSet buildH(FDSet newUnionH,FDSet newfds,FDSet fds1) throws Exception{
 
         newfds = FDAlgorithms.allSingleRHSAttribute(newfds);    //J
@@ -166,7 +145,8 @@ public class Merge {
         }
         return newUnionH;
      }
-     
+
+     //Add delimiter "," to a string
      public String addDelimiter(String str){
         String left = "";
         char c;
@@ -179,11 +159,12 @@ public class Merge {
         return left;
     }
 
-
+    ///Get the all the J's created in this step as an array List
      public ArrayList<FDSet> getJ(){
          return J;
      }
 
+     ///Get the all the J's created in this step as an array
      public String[][] getArrayJ(){
          String[][]fds = new String[10][2];
 

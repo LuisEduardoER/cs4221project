@@ -48,6 +48,7 @@ public class BigSet {
             System.out.println("}");
         }
     }
+
     public String toString() {
         String res="";
         int i = 70;
@@ -116,11 +117,6 @@ public class BigSet {
                     s = combineAttributes(addDelimiter(fd.leftToString()),fd.rightToString());
                     j++;
                 } else {
-                    /*if (s.indexOf(addDelimiter(fd.leftToString())) != -1 && s.indexOf(addDelimiter(fd.rightToString())) != -1) {
-                        //mark both as key
-                    } else if (s.indexOf(addDelimiter(fd.leftToString())) != -1 && s.indexOf(addDelimiter(fd.rightToString())) == -1) {
-                        s = s + "," + fd.rightToString();
-                    }*/
                     s = combineAttributes(s,fd.leftToString());
                     s = combineAttributes(s,fd.rightToString());
                     if(key.indexOf(fd.leftToString()) == -1){
@@ -198,7 +194,6 @@ public class BigSet {
     	 bigset.addFDSet(fdset2);
     	 bigset.addFDSet(fdset3);
     	 
-    //	 BitSet marked = FD.ToBitSet('D');
     	 BigSet bigset2= new BigSet();
     	 LinkedList<FDSet> listfdset=FDAlgorithms.superFluous(bigset);
     	 LinkedList<FDSet> hope=FDAlgorithms.superFluouscheck(listfdset);
