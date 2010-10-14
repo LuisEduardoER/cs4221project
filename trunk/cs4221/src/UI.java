@@ -186,8 +186,7 @@ public class UI extends JFrame implements ActionListener {
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, e);
             }
-        }
-        else if (event.getSource().equals(button2)){
+        } else if (event.getSource().equals(button2)) {
             try {
                 ///Step 2:
                 fdset = FDAlgorithms.removeRedundantFDs(fdset);
@@ -199,11 +198,10 @@ public class UI extends JFrame implements ActionListener {
 
                 this.textArea2.setText(this.Output);
 
-            }catch (Exception e){
+            } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, e);
             }
-        }
-        else if (event.getSource().equals(button3)){
+        } else if (event.getSource().equals(button3)) {
             try {
                 ///Step 3 Partition : Convert the FDSet into a few FDSets(BigSet)
                 Partition p = new Partition();
@@ -216,11 +214,10 @@ public class UI extends JFrame implements ActionListener {
 
                 this.textArea2.setText(this.Output);
 
-            }catch (Exception e){
+            } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, e);
             }
-        }
-        else if (event.getSource().equals(button4)){
+        } else if (event.getSource().equals(button4)) {
             try {
                 Merge m = new Merge();
                 bigset = m.works(bigset, fdset);
@@ -236,11 +233,10 @@ public class UI extends JFrame implements ActionListener {
 
                 this.textArea2.setText(this.Output);
 
-            }catch (Exception e){
+            } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, e);
             }
-        }
-        else if (event.getSource().equals(button5)){
+        } else if (event.getSource().equals(button5)) {
             try {
                 String[][] data = bigset.BigSetToArray(bigset.countFD());
                 this.t = new Transitivity(data);
@@ -255,16 +251,15 @@ public class UI extends JFrame implements ActionListener {
 
                 this.textArea2.setText(this.Output);
 
-            }catch (Exception e){
+            } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, e);
             }
-        }
-        else if (event.getSource().equals(button6)){
+        } else if (event.getSource().equals(button6)) {
             try {
                 this.Output += ("\nThere u have the Relations\n");
                 this.Output += t.m6_toString();
 
-                BigSet bigset2=t.m6_displayRelation();
+                bigset2 = t.m6_displayRelation();
                 this.buttons.setEnabled(true);
                 this.button6.setEnabled(false);
 
@@ -273,16 +268,14 @@ public class UI extends JFrame implements ActionListener {
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, e);
             }
-        }
-        else if (event.getSource().equals(buttons)){
+        } else if (event.getSource().equals(buttons)) {
             try {
-                this.Output += ("\nSuperfluous\n");
-                FDAlgorithms.removeSuperfluous(bigset2).printBigSet();
+                this.Output += ("\nRemove Superfluous attribute\n");
                 LinkedList ll = new LinkedList();
-                ll=FDAlgorithms.removeSuperfluous(bigset2).BigSetToRelation();
-                this.Output += a.superfluous_tostring(ll);
-                
-                
+                ll = FDAlgorithms.removeSuperfluous(bigset2).BigSetToRelation();
+                this.Output += FDAlgorithms.superfluous_tostring(ll);
+
+
                 this.button1.setEnabled(true);
                 this.buttons.setEnabled(false);
 
@@ -291,9 +284,7 @@ public class UI extends JFrame implements ActionListener {
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, e);
             }
-        }
-
-        else if (event.getSource().equals(button7)) {
+        } else if (event.getSource().equals(button7)) {
             //Exit the program
             System.exit(0);
         }
