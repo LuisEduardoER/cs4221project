@@ -5,7 +5,7 @@ import java.awt.Container.*;
 import java.awt.Panel.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.*;
+import java.util.*;
 import java.util.LinkedList;
 
 public class UI extends JFrame implements ActionListener {
@@ -226,8 +226,14 @@ public class UI extends JFrame implements ActionListener {
                 this.Output += bigset.toString();
 
                 this.Output += ("\nthis is the FDSet J\n");
-                this.Output += m.getJ().toString();
-
+                this.Output += "[";
+                ArrayList<FDSet> mJ = m.getJ();
+                String Jstr="";
+                for(int i=0; i<mJ.size(); i++){
+                    Jstr += mJ.get(i).toString2();
+                }                
+                this.Output += Jstr;
+                this.Output += "]\n";
                 this.button5.setEnabled(true);
                 this.button4.setEnabled(false);
 
