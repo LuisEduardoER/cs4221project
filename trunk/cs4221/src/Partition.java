@@ -3,6 +3,7 @@ import java.util.*;
 public class Partition {
         BigSet bigset = new BigSet();
 
+        ///Convert a FDSet into a BigSet
         public BigSet works(FDSet fdset){
 
             int x = fdset.getFDs().size();
