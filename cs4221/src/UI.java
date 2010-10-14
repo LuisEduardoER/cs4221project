@@ -157,7 +157,8 @@ public class UI extends JFrame implements ActionListener {
 
         if (event.getSource().equals(button1)) {
             try {
-                //this.textArea2.setText("");
+                this.textArea2.setText("");
+                this.Output = "";
                 int maxFD = 10, width = 2;
 
                 ///Step 0 : Read the input and put it into a FDSet::fdset
