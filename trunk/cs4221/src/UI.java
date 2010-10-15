@@ -163,14 +163,16 @@ public class UI extends JFrame implements ActionListener {
 
                 ///Step 0 : Read the input and put it into a FDSet::fdset
                 String input = textArea1.getText();
+                
                 this.Output += input;
 
                 ReadInput readInput = new ReadInput();
                 String[][] fds = new String[maxFD][width];
+                
                 fds = readInput.readInput(input, maxFD, width);
 
-
                 fdset = new FDSet(fds, maxFD);
+                if(fdset.toString()=="")throw new Exception ("F cannot be empty\n");
                 this.Output += "\nThis is the original FDSet with the FDs\n";
                 Output += fdset.toString();
                 FDSet temp = fdset;
