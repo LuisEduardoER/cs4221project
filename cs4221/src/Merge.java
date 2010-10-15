@@ -22,7 +22,6 @@ public class Merge {
             BitSet temp = FDAlgorithms.AttributeClosure(myfdset, fd1LeftBitSet);
             closure.add(new FD(FD.toStringWithDelimiter(temp),fd1.leftToStringWithDelimiter()));
         }
-
         Collections.sort(closure);
         Collections.sort(fds);
 
@@ -35,6 +34,7 @@ public class Merge {
         ArrayList<String> store = new ArrayList<String>();
         String ref = s[0];
         store.add(closure.get(0).rightToString());
+        if(a > 1){
         for(int i = 1;i < closure.size();i++){
             
             if(s[i].equals(ref))store.add(closure.get(i).rightToString());
@@ -98,6 +98,9 @@ public class Merge {
             }
                 
             }
+        }}
+        else {
+           newB.addFDSet(fds.get(0));
         }
 
         return newB;
