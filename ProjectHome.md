@@ -1,0 +1,1 @@
+Java-based implementation of an enhanced version of Bernstein's Algorithm
